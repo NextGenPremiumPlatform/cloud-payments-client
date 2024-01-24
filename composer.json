@@ -1,5 +1,5 @@
 {
-    "name" : "troytft/cloud-payments-client",
+    "name" : "two-faces/cloud-payments-client",
     "description": "Client for CloudPayments.ru",
     "version" : "0.1.0",
     "type" : "library",
