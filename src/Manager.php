@@ -2,6 +2,8 @@
 
 namespace CloudPayments;
 
+use CloudPayments\Exception\RequestException;
+
 class Manager
 {
     /**
@@ -297,6 +299,25 @@ class Manager
         }
 
         $response = $this->sendRequest('/kkt/receipt', $data, $headers);
+        if (empty($response['Success'])) {
+            throw new Exception\RequestException($response);
+        }
+
+        return $response;
+    }
+
+    /**
+     * @param   int  $id
+     *
+     * @return array
+     * @throws RequestException
+     */
+    public function getReceiptFromId($id)
+    {
+        $response = $this->sendRequest('/kkt/receipt/get', [
+            'Id' => $id
+        ]);
+
         if (empty($response['Success'])) {
             throw new Exception\RequestException($response);
         }

@@ -1,7 +1,7 @@
 {
     "name" : "two-faces/cloud-payments-client",
     "description": "Client for CloudPayments.ru",
-    "version" : "0.1.0",
+    "version" : "0.1.01",
     "type" : "library",
     "license" : "MIT",
     "require" : {
