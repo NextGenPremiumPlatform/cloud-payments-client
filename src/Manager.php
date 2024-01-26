@@ -228,16 +228,18 @@ class Manager
     }
 
     /**
-     * @param $transactionId
-     * @param $amount
-     * @throws Exception\RequestException
+     * @param          $transactionId
+     * @param          $amount
+     * @param   array  $data
+     *
+     * @throws RequestException
      */
-    public function refundPayment($transactionId, $amount)
+    public function refundPayment($transactionId, $amount, $data = [])
     {
-        $response = $this->sendRequest('/payments/refund', [
+        $response = $this->sendRequest('/payments/refund', array_merge([
             'TransactionId' => $transactionId,
             'Amount' => $amount
-        ]);
+        ], $data));
 
         if (isset($response['Success']) && !$response['Success']) {
             throw new Exception\RequestException($response);
