@@ -112,7 +112,7 @@ class Manager
             'Currency' => $currency,
             'IpAddress' => $ipAddress,
             'Name' => $cardHolderName,
-            'CardCryptogramPacket' => $cryptogram
+            'CardCryptogramPacket' => $cryptogram,
         ];
 
         $response = $this->sendRequest($endpoint, array_merge($defaultParams, $params));
@@ -181,7 +181,7 @@ class Manager
     {
         $response = $this->sendRequest('/payments/cards/post3ds', [
             'TransactionId' => $transactionId,
-            'PaRes' => $token
+            'PaRes' => $token,
         ]);
 
         if (isset($response['Message']) && $response['Message']) {
@@ -204,7 +204,7 @@ class Manager
     {
         $response = $this->sendRequest('/payments/confirm', [
             'TransactionId' => $transactionId,
-            'Amount' => $amount
+            'Amount' => $amount,
         ]);
 
         if (isset($response['Success']) && !$response['Success']) {
@@ -219,7 +219,7 @@ class Manager
     public function voidPayment($transactionId)
     {
         $response = $this->sendRequest('/payments/void', [
-            'TransactionId' => $transactionId
+            'TransactionId' => $transactionId,
         ]);
 
         if (isset($response['Success']) && !$response['Success']) {
@@ -238,7 +238,7 @@ class Manager
     {
         $response = $this->sendRequest('/payments/refund', array_merge([
             'TransactionId' => $transactionId,
-            'Amount' => $amount
+            'Amount' => $amount,
         ], $data));
 
         if (isset($response['Success']) && !$response['Success']) {
@@ -254,7 +254,7 @@ class Manager
     public function findPayment($invoiceId)
     {
         $response = $this->sendRequest('/payments/find', [
-            'InvoiceId' => $invoiceId
+            'InvoiceId' => $invoiceId,
         ]);
 
         if (isset($response['Success']) && !$response['Success']) {
@@ -278,7 +278,7 @@ class Manager
 
         $response = $this->sendRequest('/payments/list', [
             'Date' => $date,
-            'TimeZone' => $timezone
+            'TimeZone' => $timezone,
         ]);
 
         if (isset($response['Success']) && !$response['Success']) {
@@ -289,8 +289,10 @@ class Manager
     }
 
     /**
-     * @param $data
-     * @param $idempotent_id
+     * @param         $data
+     * @param   null  $requestId
+     *
+     * @return array
      * @throws RequestException
      */
     public function receipt($data, $requestId = null)
@@ -317,10 +319,46 @@ class Manager
     public function getReceiptFromId($id)
     {
         $response = $this->sendRequest('/kkt/receipt/get', [
-            'Id' => $id
+            'Id' => $id,
         ]);
 
         if (empty($response['Success'])) {
+            throw new Exception\RequestException($response);
+        }
+
+        return $response;
+    }
+
+    /**
+     * @param   array  $data
+     *
+     * @return array
+     * @throws RequestException
+     */
+    public function createOrder(array $data)
+    {
+        $response = $this->sendRequest('/orders/create', $data);
+
+        if (isset($response['Success']) && !$response['Success']) {
+            throw new Exception\RequestException($response);
+        }
+
+        return $response;
+    }
+
+    /**
+     * @param $id
+     *
+     * @return array
+     * @throws RequestException
+     */
+    public function cancelOrder($id)
+    {
+        $response = $this->sendRequest('/orders/cancel', [
+            'Id' => $id,
+        ]);
+
+        if (isset($response['Success']) && !$response['Success']) {
             throw new Exception\RequestException($response);
         }
 
