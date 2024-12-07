@@ -171,6 +171,25 @@ class Manager
     }
 
     /**
+     * @param $amount
+     * @param $currency
+     * @param $accountId
+     * @param $params
+     *
+     * @return array
+     */
+    public function createPaymentSbpLink($amount, $currency, $accountId, $params = [])
+    {
+        $defaultParams = [
+            'Amount' => $amount,
+            'Currency' => $currency,
+            'AccountId' => $accountId,
+        ];
+
+        return $this->sendRequest('/payments/qr/sbp/link', array_merge($defaultParams, $params));
+    }
+
+    /**
      * @param $transactionId
      * @param $token
      * @return Model\Transaction
